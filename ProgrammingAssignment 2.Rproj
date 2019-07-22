@@ -1,13 +1,24 @@
-Version: 1.0
+makeCacheMatrix <- function(x = matrix()){
+  
+  inv=NULL
+  set=function(l){
+    x<<-l
+    inv<<-NULL
+  }
+  get=function()x
+  setinv=function(inverse) inv<<-inverse
+  getinv=function() inv
+  list(set=set,get=get,setinv=setinv,getinv=getinv)
+}
 
-RestoreWorkspace: Default
-SaveWorkspace: Default
-AlwaysSaveHistory: Default
-
-EnableCodeIndexing: Yes
-UseSpacesForTab: Yes
-NumSpacesForTab: 2
-Encoding: UTF-8
-
-RnwWeave: Sweave
-LaTeX: pdfLaTeX
+cacheSolve <- function(x){
+  inv=x$getinv()
+  if(!is.null(inv)){
+    message("already calculated")
+    return(inv)
+  }
+  mat.data = x$get()
+  inv=solve(mat.data)
+  x$Setinv(inv)
+  return(inv)
+}
